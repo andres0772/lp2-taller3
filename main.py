@@ -25,17 +25,16 @@ URLs = [
 app = Flask(__name__)
 
 def descargar(url):
-    #descarga el csv en un dataframe desde el url
+    # Descarga el CSV en un DataFrame desde el URL
     df = pd.read_csv(url)
-    #hace la conversion de la caneda en una fecha real
+    # Hace la conversión de la cadena en una fecha real
     df['created_at'] = pd.to_datetime(df['created_at'])
-#se borra las columnas inecesarias
-    if 'field6' in df.columns:
-        df.drop(['entry_id', 'field5', 'field6'], axis=1, inplace=True)
-    else:
-        df.drop(['entry_id', 'field5', 'field7'], axis=1, inplace=True)
-     # Renombre de columnas
-    df.columns = ['fecha', 'temp_exterior', 'temp_interior', 'presion_at', 'humedad'],
+    # Se borran las columnas innecesarias si existen
+    columnas_a_borrar = ['entry_id', 'field5', 'field6', 'field7']
+    columnas_existentes = [col for col in columnas_a_borrar if col in df.columns]
+    df.drop(columnas_existentes, axis=1, inplace=True)
+    # Renombre de columnas
+    df.columns = ['fecha', 'temp_exterior', 'temp_interior', 'presion_at', 'humedad']
     return df
 
 def graficar(i, df):
