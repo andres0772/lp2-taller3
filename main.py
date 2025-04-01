@@ -17,7 +17,7 @@ matplotlib.use('agg')  # Quita el warning de main thread
 
 
 URLs = [
-    'https://thingspeak.com/channels/870845/feeds.csv?results=8000',
+    'https://thingspeak.com/channels/1056342/feeds.csv?results=8000',
     
     
 ]
@@ -39,7 +39,7 @@ def descargar(url):
     remaining_columns = len(df.columns)
     expected_columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
 
-    if url == 'https://thingspeak.com/channels/870845/feeds.csv?results=8000' and remaining_columns == 4:
+    if url == 'https://thingspeak.com/channels/1056342/feeds.csv?results=8000' and remaining_columns == 4:
         df.columns = ['fecha', 'temperatura', 'humedad', 'presion']
     elif remaining_columns == 5:
         df.columns = expected_columns
