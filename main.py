@@ -8,23 +8,26 @@ matplotlib.use('agg')  # Quita el warning de main thread
 
 URLs = [
     'https://api.thingspeak.com/channels/870845/feeds.CSV?results=8000',
-    'https://thingspeak.mathworks.com/channels/1293177/feeds.CSV?results=8000',
-    'https://thingspeak.mathworks.com/channels/12397/feeds.CSV?results=8000',
+    'https://api.thingspeak.com/channels/1293177/feeds.CSV?results=8000',
+    'https://api.thingspeak.com/channels/12397/feeds.CSV?results=8000',
+    
 ]
 
 app = Flask(__name__)
 
 def descargar(url):
-    df = pd.read_csv(url)
+    #descarga el csv en un dataframe desde el url
+    df = pd.read_CSV(url)
+    #hace la conversion de la caneda en una fecha real
     df['created_at'] = pd.to_datetime(df['created_at'])
-
+#se borra las columnas inecesarias
     if 'field6' in df.columns:
         df.drop(['entry_id', 'field5', 'field6'], axis=1, inplace=True)
     else:
         df.drop(['entry_id', 'field5', 'field7'], axis=1, inplace=True)
 
     # Renombre de columnas
-    df.columns = ['fecha', 'temp_exterior', 'temp_interior', 'presion_atm', 'humedad']
+    df.columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
     return df
 
 def graficar(i, df):

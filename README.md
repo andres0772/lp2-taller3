@@ -28,6 +28,7 @@ git clone https://github.com/UR-CC/lp2-taller3.git
 ```bash
 cd lp2-taller3
 python -m venv venv
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\venv\Scripts\Activate
 ```
 
