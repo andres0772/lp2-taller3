@@ -37,14 +37,11 @@ def descargar(url):
             df.drop(col, axis=1, inplace=True)
 
     # Renombre de columnas
-    # Asegurarse de que haya suficientes columnas para renombrar
-    expected_columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
     actual_columns = len(df.columns)
-    if actual_columns == len(expected_columns):
-        df.columns = expected_columns
-    elif actual_columns > len(expected_columns):
-        # Tomar las primeras N columnas si hay más de las esperadas
-        df = df.iloc[:, :len(expected_columns)]
+    if url == 'https://thingspeak.com/channels/870845/feeds.csv?results=8000' and actual_columns == 4:
+        df.columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'humedad']
+    elif actual_columns == 5:
+        expected_columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
         df.columns = expected_columns
     else:
         print(f"Advertencia: Número inesperado de columnas ({actual_columns}) en el DataFrame de {url}")
