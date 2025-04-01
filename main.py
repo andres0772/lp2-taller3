@@ -5,14 +5,21 @@ import matplotlib.pyplot as plt
 
 import matplotlib
 
+# Buscar en ThingSpeak estaciones meteorológicas:
+# https://thingspeak.mathworks.com/channels/public
+# Ejemplos:
+# https://thingspeak.mathworks.com/channels/870845
+# https://thingspeak.mathworks.com/channels/1293177
+# https://thingspeak.mathworks.com/channels/12397
+
 matplotlib.use('agg')  # Quita el warning de main thread
 
 
 
 URLs = [
-    'https://thingspeak.com/channels/159150/feeds.csv?results=8000',
-    'https://thingspeak.com/channels/196384/feeds.csv?results=8000',
-    'https://thingspeak.com/channels/178434/feeds.csv?results=8000',
+    'https://thingspeak.com/channels/870845/feeds.csv?results=8000',
+    'https://thingspeak.com/channels/1293177/feeds.csv?results=8000',
+    'https://thingspeak.com/channels/12397/feeds.csv?results=8000',
     
 ]
 
