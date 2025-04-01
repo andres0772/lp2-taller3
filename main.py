@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect
 import pandas as pd
+import matplotlib.pyplot as ply
 # Buscar en ThingSpeak estaciones meteorológicas:
 # https://thingspeak.mathworks.com/channels/public
 # Ejemplos:
@@ -29,14 +30,17 @@ def descargar(url):
     return df
 
 def graficar(df):
-  for columna in df.columns
+  for columna in df.columns[1:]
 
   #creacion de la figure
-  fig = plt.figure(figsize==(8,5))
+  fig = plt.figure(figsize=(8,5))
   #se hace la grafica
   plt.plot(df['fecha'], df[columna], label=columna)
   #se pone los titulos
   plt.tittle(f"historia sobre {columna}")
+  #graba la imagen
+  plt.savefig(f"static/{columna}.png")
+  plt.close()
   
 
 @app.route('/')
