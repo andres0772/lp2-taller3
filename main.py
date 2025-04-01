@@ -47,16 +47,18 @@ def graficar(df):
 
 @app.route('/')
 def index():
-    return render_template('index.html', nombres=nombres)
-
-
-# Programa Principal
-if __name__ == '__main__':
   #descarga los datos y crea las graficas
       for url in URLs:
         nombres =[]
         df= descargar(url)
         nombres.extend(graficar(dftemp))
+
+       return render_template('index.html', nombres=nombres)
+
+
+# Programa Principal
+if __name__ == '__main__':
+  
 
 
   # Ejecuta la app
