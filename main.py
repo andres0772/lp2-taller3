@@ -1,25 +1,15 @@
 from flask import Flask, render_template, redirect
 import pandas as pd
 import matplotlib.pyplot as plt
-
-
 import matplotlib
-
-# Buscar en ThingSpeak estaciones meteorológicas:
-# https://thingspeak.mathworks.com/channels/public
-# Ejemplos:
-# https://thingspeak.mathworks.com/channels/870845
-# https://thingspeak.mathworks.com/channels/1293177
-# https://thingspeak.mathworks.com/channels/12397
 
 matplotlib.use('agg')  # Quita el warning de main thread
 
-
-
 URLs = [
     'https://thingspeak.com/channels/870845/feeds.csv?results=8000',
-    
-    
+    # Añade aquí las otras URLs de los canales si quieres graficarlos
+    # 'https://thingspeak.com/channels/1293177/feeds.csv?results=8000',
+    # 'https://thingspeak.com/channels/12397/feeds.csv?results=8000'
 ]
 
 app = Flask(__name__)
@@ -37,13 +27,25 @@ def descargar(url):
 
     # Renombre de columnas
     remaining_columns = len(df.columns)
-    expected_columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
-
-    if url == 'https://thingspeak.com/channels/870845/feeds.csv?results=8000' and remaining_columns == 4:
-        df.columns = ['fecha', 'temperatura', 'humedad', 'presion']
+    if url == 'https://thingspeak.com/channels/870845/feeds.csv?results=8000' and remaining_columns >= 3:
+        # Asignamos nombres basados en la información de ThingSpeak
+        nombres_columnas = ['fecha', 'temperatura', 'humedad']
+        if remaining_columns > 3:
+            nombres_columnas.append('presion') # Usando 'presion' para coincidir con tu código
+        df = df.iloc[:, :len(nombres_columnas)] # Seleccionamos las primeras N columnas
+        df.columns = nombres_columnas
     elif remaining_columns == 5:
-        df.columns = expected_columns
-    
+        df.columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
+    elif url == 'https://thingspeak.com/channels/1293177/feeds.csv?results=8000' and remaining_columns == 6:
+        df = df[['created_at', 'field1', 'field2', 'field3', 'field4']]
+        df.columns = ['fecha', 'temperatura', 'humedad', 'presion', 'otro'] # Tentative
+        print("Advertencia: Se asumió la correspondencia de columnas para el canal 1293177. ¡Verificar!")
+    elif url == 'https://thingspeak.com/channels/12397/feeds.csv?results=8000' and remaining_columns == 6:
+        df = df[['created_at', 'field1', 'field2', 'field3', 'field4']]
+        df.columns = ['fecha', 'temperatura', 'humedad', 'presion', 'otro'] # Tentative
+        print("Advertencia: Se asumió la correspondencia de columnas para el canal 12397. ¡Verificar!")
+    elif remaining_columns == 5:
+        df.columns = ['fecha', 'temperatura', 'humedad', 'presion', 'otro'] # Genérico para 5 columnas
     else:
         print(f"Advertencia: Número inesperado de columnas ({remaining_columns}) en el DataFrame de {url}")
         print(f"Columnas encontradas: {df.columns.tolist()}")
@@ -53,17 +55,19 @@ def descargar(url):
 
 def graficar(i, df):
     lista = []
-    for columna in df.columns[1:]:
-        # Creación de la figura
-        fig = plt.figure(figsize=(8, 5))
-        # Se hace la gráfica
-        plt.plot(df['fecha'], df[columna], label=columna)
-        # Se ponen los títulos
-        plt.title(f"Historia sobre la {columna} - estacion #{i}")
-        # Graba la imagen
-        plt.savefig(f"static/g{i}_{columna}.png")
-        lista.append(f"g{i}_{columna}.png")
-        plt.close()
+    columnas_a_graficar = ['temperatura', 'humedad', 'presion']
+    for columna in columnas_a_graficar:
+        if columna in df.columns:
+            # Creación de la figura
+            fig = plt.figure(figsize=(8, 5))
+            # Se hace la gráfica
+            plt.plot(df['fecha'], df[columna], label=columna)
+            # Se ponen los títulos
+            plt.title(f"Historia sobre la {columna} - estacion #{i}")
+            # Graba la imagen
+            plt.savefig(f"static/g{i}_{columna}.png")
+            lista.append(f"g{i}_{columna}.png")
+            plt.close()
     return lista
 
 def actualizar():
