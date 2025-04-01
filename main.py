@@ -30,6 +30,7 @@ def descargar(url):
     return df
 
 def graficar(df):
+  lista =[]
   for columna in df.columns[1:]
 
   #creacion de la figure
@@ -40,15 +41,23 @@ def graficar(df):
   plt.tittle(f"historia sobre {columna}")
   #graba la imagen
   plt.savefig(f"static/{columna}.png")
+  lista.append(f"{columna}.png")
   plt.close()
-  
+  return lista
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', nombres=nombres)
+
 
 # Programa Principal
 if __name__ == '__main__':
-      
+  #descarga los datos y crea las graficas
+      for url in URLs:
+        nombres =[]
+        df= descargar(url)
+        nombres.extend(graficar(dftemp))
+
+
   # Ejecuta la app
   app.run(host='0.0.0.0', debug=True)
