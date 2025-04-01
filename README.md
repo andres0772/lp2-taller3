@@ -7,7 +7,7 @@
 
 ## Autores
 
-- [@estudiante](https://www.github.com/estudiante)
+- [andres esteban vasquez peña](https://github.com/andres0772/lp2-taller3.git
 
 ## Descripción del Proyecto
 
@@ -21,7 +21,7 @@ Morbi quam lectus, tempus sit amet mi non, facilisis dignissim erat. Aenean tort
 
 1. Clonar el proyecto
 ```bash
-git clone https://github.com/UR-CC/lp2-taller3.git
+https://github.com/andres0772/lp2-taller3.git
 ```
 
 2. Crear y activar entorno virtual
@@ -44,6 +44,6 @@ Maecenas sed lorem at arcu varius mollis. Sed eleifend nulla ut blandit interdum
 1. Ejecutar el proyecto
 ```bash
 cd lp2-taller3
-python app.py
+python main.py
 ```
 
