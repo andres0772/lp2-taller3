@@ -8,26 +8,26 @@ import matplotlib
 
 matplotlib.use('agg')  # Quita el warning de main thread
 
-    # Buscar en ThingSpeak estaciones meteorológicas:
-    # https://thingspeak.mathworks.com/channels/public
-    # Ejemplos:
-    # https://thingspeak.mathworks.com/channels/870845
-    # https://thingspeak.mathworks.com/channels/1293177
-    # https://thingspeak.mathworks.com/channels/12397
+# Buscar en ThingSpeak estaciones meteorológicas:
+# https://thingspeak.mathworks.com/channels/public
+# Ejemplos:
+# https://thingspeak.mathworks.com/channels/870845
+# https://thingspeak.mathworks.com/channels/1293177
+# https://thingspeak.mathworks.com/channels/12397
 
 URLs = [
     'https://thingspeak.mathworks.com/channels/1293177/feeds.json?results=8000',
     'https://thingspeak.mathworks.com/channels/2057381/feeds.json?results=8000',
     'https://thingspeak.mathworks.com/channels/12397/feeds.json?results=8000',
-      
 ]
 
 app = Flask(__name__)
 
 def descargar(url):
-    headers = {'User-Agent': 'MiAplicacionPython/1.0'}
+    # descarga el json en un dataframe desde el url
+    headers = {'User-Agent': 'MiAplicacionPython/1.0'}  # Agrega un encabezado User-Agent
     response = requests.get(url, headers=headers)
-    response.raise_for_status()
+    response.raise_for_status()  # Lanza una excepción si la petición falla (status code != 200)
     data = response.json()  # Obtiene los datos JSON de la respuesta
     feeds = data['feeds']  # Los datos de las lecturas suelen estar en la lista 'feeds'
     df = pd.DataFrame(feeds)
@@ -41,6 +41,12 @@ def descargar(url):
 
     # Convertir la columna 'fecha' a datetime
     df['fecha'] = pd.to_datetime(df['fecha'])
+
+    # Manejar valores nulos reemplazándolos con 0
+    df['temperatura_exterior'].fillna(0, inplace=True)
+    df['temperatura_interior'].fillna(0, inplace=True)
+    df['presion_atmosferica'].fillna(0, inplace=True)
+    df['humedad'].fillna(0, inplace=True)
 
     # Eliminar columnas 'entry_id' y otras 'field' que no se renombraron
     columns_to_drop = [col for col in df.columns if col.startswith('field') and col not in ['field1', 'field2', 'field3', 'field4']]
