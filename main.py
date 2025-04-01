@@ -17,7 +17,7 @@ matplotlib.use('agg')  # Quita el warning de main thread
 
 
 URLs = [
-    'https://thingspeak.com/channels/870845/feeds.csv?results=8000',
+    'https://thingspeak.com/channels/159150/feeds.csv?results=8000',
     
     
 ]
