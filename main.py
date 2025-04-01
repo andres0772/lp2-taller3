@@ -40,7 +40,7 @@ def descargar(url):
     expected_columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
 
     if url == 'https://thingspeak.com/channels/1293177/feeds.csv?results=8000' and remaining_columns == 4:
-        df.columns = ['fecha', 'temperatura', 'humedad', 'presion']
+        df.columns = ['temperatura', 'humedad', 'presion']
     elif remaining_columns == 5:
         df.columns = expected_columns
     
