@@ -8,11 +8,18 @@ import matplotlib
 
 matplotlib.use('agg')  # Quita el warning de main thread
 
+    # Buscar en ThingSpeak estaciones meteorológicas:
+    # https://thingspeak.mathworks.com/channels/public
+    # Ejemplos:
+    # https://thingspeak.mathworks.com/channels/870845
+    # https://thingspeak.mathworks.com/channels/1293177
+    # https://thingspeak.mathworks.com/channels/12397
+
 URLs = [
-    'https://api.thingspeak.com/channels/870845/feeds.CSV?results=8000',
-    'https://api.thingspeak.com/channels/1293177/feeds.CSV?results=8000',
-    'https://api.thingspeak.com/channels/12397/feeds.CSV?results=8000',
-    
+    'https://thingspeak.mathworks.com/channels/1293177/feeds.csv?results=8000',
+    'https://thingspeak.mathworks.com/channels/2057381/feeds.csv?results=8000',
+    'https://thingspeak.mathworks.com/channels/12397/feeds.csv?results=8000',
+      
 ]
 
 app = Flask(__name__)
