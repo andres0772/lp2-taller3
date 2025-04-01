@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 def descargar(url):
     #descarga el csv en un dataframe desde el url
-    df = pd.read_CSV(url)
+    df = pd.read_csv(url)
     #hace la conversion de la caneda en una fecha real
     df['created_at'] = pd.to_datetime(df['created_at'])
 #se borra las columnas inecesarias
