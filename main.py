@@ -16,7 +16,7 @@ URLs = [
     
 ]
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 def descargar(url):
     #descarga el csv en un dataframe desde el url
