@@ -8,15 +8,17 @@ import pandas as pd
 # https://thingspeak.mathworks.com/channels/12397
 
 URLs = [
-  'https://thingspeak.mathworks.com/channels/870845feeds.CSV?results=8000',
-  'https://thingspeak.mathworks.com/channels/1293177feeds.CSV?results=8000'
-  'https://thingspeak.mathworks.com/channels/12397feeds.CSV?results=8000' 
+  'https://thingspeak.mathworks.com/channels/870845/feeds.CSV?results=8000',
+   'https://thingspeak.mathworks.com/channels/1293177/feeds.CSV?results=8000',
+    'https://thingspeak.mathworks.com/channels/12397/feeds.CSV?results=8000',
+ 
   
 ]
 
 app = Flask(__name__)
 
-def descargar(URLs):
+def descargar(url):
+  df = pd.read_csv(url)
 
 @app.route('/')
 def index():
