@@ -11,6 +11,7 @@ matplotlib.use('agg')  # Evita problemas con hilos en Matplotlib
 URLs = [
     'https://thingspeak.com/channels/870845/feeds.csv?results=8000',
     'https://thingspeak.com/channels/1293177/feeds.csv?results=8000',
+    'https://thingspeak.com/channels/12397/feeds.csv?results=8000',
 
 
 ]
