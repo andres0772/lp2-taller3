@@ -45,20 +45,20 @@ def descargar(url):
     elif remaining_columns == 5:
         df.columns = expected_columns
     elif url == 'https://thingspeak.com/channels/1293177/feeds.csv?results=8000' and remaining_columns == 6:
-        # Aquí necesitamos hacer una suposición sobre la correspondencia de las columnas
-        # Basándonos en las columnas encontradas: ['created_at', 'field1', 'field2', 'field3', 'field4', 'field8']
-        # Y las esperadas: ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
-        # Vamos a hacer una suposición inicial. Esto PROBABLEMENTE necesite ser ajustado.
-        df = df[['created_at', 'field1', 'field2', 'field3', 'field4']] # Seleccionamos las primeras 5
+        df = df[['created_at', 'field1', 'field2', 'field3', 'field4']]
         df.columns = expected_columns
         print("Advertencia: Se asumió la correspondencia de columnas para el canal 1293177. ¡Verificar!")
+    elif url == 'https://thingspeak.com/channels/12397/feeds.csv?results=8000' and remaining_columns == 6:
+        df = df[['created_at', 'field1', 'field2', 'field3', 'field4']]
+        df.columns = expected_columns
+        print("Advertencia: Se asumió la correspondencia de columnas para el canal 12397. ¡Verificar!")
     else:
         print(f"Advertencia: Número inesperado de columnas ({remaining_columns}) en el DataFrame de {url}")
         print(f"Columnas encontradas: {df.columns.tolist()}")
         # Aquí podrías decidir qué hacer si no hay suficientes columnas
 
     return df
-    
+
 def graficar(i, df):
     lista = []
     for columna in df.columns[1:]:
