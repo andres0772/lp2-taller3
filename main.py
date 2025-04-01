@@ -45,7 +45,7 @@ def graficar(i, df):
         # Se hace la gráfica
         plt.plot(df['fecha'], df[columna], label=columna)
         # Se ponen los títulos
-        plt.title(f"Historia sobre {columna} - estacion #{i}")
+        plt.title(f"Historia sobre la {columna} - estacion #{i}")
         # Graba la imagen
         plt.savefig(f"static/g{i}_{columna}.png")
         lista.append(f"g{i}_{columna}.png")
