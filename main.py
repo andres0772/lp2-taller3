@@ -37,19 +37,28 @@ def descargar(url):
             df.drop(col, axis=1, inplace=True)
 
     # Renombre de columnas
-    actual_columns = len(df.columns)
-    if url == 'https://thingspeak.com/channels/870845/feeds.csv?results=8000' and actual_columns == 4:
+    remaining_columns = len(df.columns)
+    expected_columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
+
+    if url == 'https://thingspeak.com/channels/870845/feeds.csv?results=8000' and remaining_columns == 4:
         df.columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'humedad']
-    elif actual_columns == 5:
-        expected_columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
+    elif remaining_columns == 5:
         df.columns = expected_columns
+    elif url == 'https://thingspeak.com/channels/1293177/feeds.csv?results=8000' and remaining_columns == 6:
+        # Aquí necesitamos hacer una suposición sobre la correspondencia de las columnas
+        # Basándonos en las columnas encontradas: ['created_at', 'field1', 'field2', 'field3', 'field4', 'field8']
+        # Y las esperadas: ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
+        # Vamos a hacer una suposición inicial. Esto PROBABLEMENTE necesite ser ajustado.
+        df = df[['created_at', 'field1', 'field2', 'field3', 'field4']] # Seleccionamos las primeras 5
+        df.columns = expected_columns
+        print("Advertencia: Se asumió la correspondencia de columnas para el canal 1293177. ¡Verificar!")
     else:
-        print(f"Advertencia: Número inesperado de columnas ({actual_columns}) en el DataFrame de {url}")
+        print(f"Advertencia: Número inesperado de columnas ({remaining_columns}) en el DataFrame de {url}")
         print(f"Columnas encontradas: {df.columns.tolist()}")
         # Aquí podrías decidir qué hacer si no hay suficientes columnas
 
     return df
-
+    
 def graficar(i, df):
     lista = []
     for columna in df.columns[1:]:
