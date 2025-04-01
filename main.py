@@ -75,6 +75,9 @@ def actualizar():
     nombres = []
     for i, url in enumerate(URLs):
         df = descargar(url)
+        if i == 0:  # Imprime las primeras filas del DataFrame para la primera URL
+            print("Primeras filas del DataFrame para la estación 0:")
+            print(df.head())
         nombres.extend(graficar(i, df))
     return nombres
 
