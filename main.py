@@ -1,12 +1,13 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect
 import pandas as pd
 import matplotlib.pyplot as plt
+
 import matplotlib
 
-matplotlib.use('agg')  # Quita el warning de main
+matplotlib.use('agg')  # Quita el warning de main thread
 
 URLs = [
-    'https://thingspeak.mathworks.com/channels/870845/feeds.CSV?results=8000',
+    'https://api.thingspeak.com/channels/870845/feeds.CSV?results=8000',
     'https://thingspeak.mathworks.com/channels/1293177/feeds.CSV?results=8000',
     'https://thingspeak.mathworks.com/channels/12397/feeds.CSV?results=8000',
 ]
@@ -34,7 +35,7 @@ def graficar(i, df):
         # Se hace la gráfica
         plt.plot(df['fecha'], df[columna], label=columna)
         # Se ponen los títulos
-        plt.title(f"Historia sobre {columna}")
+        plt.title(f"Historia sobre {columna} - estacion #{i}")
         # Graba la imagen
         plt.savefig(f"static/g{i}_{columna}.png")
         lista.append(f"g{i}_{columna}.png")
@@ -57,7 +58,7 @@ def index():
 def actualizar_datos():
     global nombres
     nombres = actualizar()
-    return redirect(url_for('index'))
+    return redirect('/')
 
 # Programa Principal
 if __name__ == '__main__':
