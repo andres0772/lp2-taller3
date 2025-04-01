@@ -67,7 +67,7 @@ def actualizar_datos():
     return redirect('/')
 
 # Programa Principal
-if _name_ == '_main_':
+if __name__ == '__main__':
     # Descarga los datos y crea las gráficas
     nombres = actualizar()
 
