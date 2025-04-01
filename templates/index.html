@@ -1,5 +1,5 @@
 {% for nombre in nombres %}
-    <p>{{ nombre }}</p>
+    
     <img src="{{ url_for('static', filename=nombre.replace('static/', '')) }}"><br>
 
 {% endfor %}
