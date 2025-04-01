@@ -16,31 +16,37 @@ matplotlib.use('agg')  # Quita el warning de main thread
     # https://thingspeak.mathworks.com/channels/12397
 
 URLs = [
-    'https://thingspeak.mathworks.com/channels/1293177/feeds.csv?results=8000',
-    'https://thingspeak.mathworks.com/channels/2057381/feeds.csv?results=8000',
-    'https://thingspeak.mathworks.com/channels/12397/feeds.csv?results=8000',
+    'https://thingspeak.mathworks.com/channels/1293177/feeds.json?results=8000',
+    'https://thingspeak.mathworks.com/channels/2057381/feeds.json?results=8000',
+    'https://thingspeak.mathworks.com/channels/12397/feeds.json?results=8000',
       
 ]
 
 app = Flask(__name__)
 
 def descargar(url):
-    #descarga el csv en un dataframe desde el url
-    headers = {'User-Agent': 'MiAplicacionPython/1.0'}  # Agrega un encabezado User-Agent
+    headers = {'User-Agent': 'MiAplicacionPython/1.0'}
     response = requests.get(url, headers=headers)
-    response.raise_for_status()  # Lanza una excepción si la petición falla (status code != 200)
-    csv_data = response.text
-    df = pd.read_csv(io.StringIO(csv_data))
-    #hace la conversion de la caneda en una fecha real
-    df['created_at'] = pd.to_datetime(df['created_at'])
-#se borra las columnas inecesarias
-    if 'field6' in df.columns:
-        df.drop(['entry_id', 'field5', 'field6'], axis=1, inplace=True)
-    else:
-        df.drop(['entry_id', 'field5', 'field7'], axis=1, inplace=True)
+    response.raise_for_status()
+    data = response.json()  # Obtiene los datos JSON de la respuesta
+    feeds = data['feeds']  # Los datos de las lecturas suelen estar en la lista 'feeds'
+    df = pd.DataFrame(feeds)
 
-    # Renombre de columnas
-    df.columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
+    # Renombrar y seleccionar columnas (esto puede necesitar ajuste según la estructura del JSON)
+    df.rename(columns={'created_at': 'fecha',
+                       'field1': 'temperatura_exterior',
+                       'field2': 'temperatura_interior',
+                       'field3': 'presion_atmosferica',
+                       'field4': 'humedad'}, inplace=True)
+
+    # Convertir la columna 'fecha' a datetime
+    df['fecha'] = pd.to_datetime(df['fecha'])
+
+    # Eliminar columnas 'entry_id' y otras 'field' que no se renombraron
+    columns_to_drop = [col for col in df.columns if col.startswith('field') and col not in ['field1', 'field2', 'field3', 'field4']]
+    columns_to_drop.append('entry_id')
+    df.drop(columns=columns_to_drop, errors='ignore', inplace=True)
+
     return df
 
 def graficar(i, df):
