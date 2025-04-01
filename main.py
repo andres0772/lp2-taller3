@@ -32,7 +32,7 @@ def descargar(url):
 #se borra las columnas inecesarias
     if 'field6' in df.columns:
         df.drop(['entry_id', 'field5', 'field6'], axis=1, inplace=true)
-    else
+    else:
         df.drop(['entry_id', 'field5', 'field7'], axis=1, inplace=true)
      # Renombre de columnas
     df.columns = ['fecha', 'temp_exterior', 'temp_interior', 'presion_at', 'humedad'],
