@@ -31,9 +31,9 @@ def descargar(url):
     df['created_at'] = pd.to.datetime(df['created_at'])
 #se borra las columnas inecesarias
     if 'field6' in df.columns:
-        df.drop(['entry_id', 'field5', 'field6'] axis=1 inplace=true)
+        df.drop(['entry_id', 'field5', 'field6'], axis=1 inplace=true),
     else
-        df.drop(['entry_id', 'field5', 'field7'] axis=1 inplace=true)
+        df.drop(['entry_id', 'field5', 'field7'], axis=1 inplace=true),
      # Renombre de columnas
     df.columns = ['fecha', 'temp_exterior', 'temp_interior', 'presion_at', 'humedad'],
     return df
