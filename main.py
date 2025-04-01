@@ -1,6 +1,9 @@
 from flask import Flask, render_template, redirect
 import pandas as pd
 import matplotlib.pyplot as ply
+
+import matplotlib
+matplotlib.use('agg')#quita el warning de main
 # Buscar en ThingSpeak estaciones meteorológicas:
 # https://thingspeak.mathworks.com/channels/public
 # Ejemplos:
@@ -29,7 +32,7 @@ def descargar(url):
     df.columns = ['fecha', 'temp_exterior', 'temp_interior', 'presion_atm','humedad']
     return df
 
-def graficar(df):
+def graficar(i df):
   lista =[]
   for columna in df.columns[1:]
 
@@ -40,26 +43,40 @@ def graficar(df):
   #se pone los titulos
   plt.tittle(f"historia sobre {columna}")
   #graba la imagen
-  plt.savefig(f"static/{columna}.png")
-  lista.append(f"{columna}.png")
+  plt.savefig(f"static/g{i}_{columna}.png")
+  lista.append(f"g{i}_{columna}.png")
   plt.close()
   return lista
 
+def actualizar():
+   #descarga los datos y crea las graficas
+       nombres =[]
+      for i, url in enumerate(URLs):
+        
+        df= descargar(url)
+        nombres.extend(graficar(i, df))
+    return nombres
+
 @app.route('/')
 def index():
-  #descarga los datos y crea las graficas
-      for url in URLs:
-        nombres =[]
-        df= descargar(url)
-        nombres.extend(graficar(df))
+  return render_template('index.html', nombres=nombres)
 
-       return render_template('index.html', nombres=nombres)
-
-
+@app.route('/actualizar')
+def actualizar_datos():
+  global nombres 
+  nombres = actualizar()
+  return url_for('index')
 # Programa Principal
 if __name__ == '__main__':
-  
+   #descarga los datos y crea las graficas
+       nombres =[]
+      for i, url in enumerate(URLs):
+        
+        df= descargar(url)
+        nombres.extend(graficar(i, df))
+      
 
 
   # Ejecuta la app
+  nombres = actualizar()
   app.run(host='0.0.0.0', debug=True)

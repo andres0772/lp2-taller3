@@ -1,3 +1,4 @@
-{{ for nombre in nombres  }}
+{% for nombre in nombres  %}
 <img src="{{ url_for('static', filename=nombre) }}"><br>
-{{ end for }}
+{% endfor %}
+<button><a href="{{ url_for {actualizar_datos}}}">actualizar</button>
