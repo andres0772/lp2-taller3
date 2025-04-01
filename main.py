@@ -51,7 +51,7 @@ def index():
       for url in URLs:
         nombres =[]
         df= descargar(url)
-        nombres.extend(graficar(dftemp))
+        nombres.extend(graficar(df))
 
        return render_template('index.html', nombres=nombres)
 
