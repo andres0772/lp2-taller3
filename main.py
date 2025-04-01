@@ -1,58 +1,36 @@
 from flask import Flask, render_template, redirect
 import pandas as pd
 import matplotlib.pyplot as plt
-import requests
-import io
+
 
 import matplotlib
 
 matplotlib.use('agg')  # Quita el warning de main thread
 
-# Buscar en ThingSpeak estaciones meteorológicas:
-# https://thingspeak.mathworks.com/channels/public
-# Ejemplos:
-# https://thingspeak.mathworks.com/channels/870845
-# https://thingspeak.mathworks.com/channels/1293177
-# https://thingspeak.mathworks.com/channels/12397
+
 
 URLs = [
-    'https://thingspeak.mathworks.com/channels/1293177/feeds.json?results=8000',
-    'https://thingspeak.mathworks.com/channels/2057381/feeds.json?results=8000',
-    'https://thingspeak.mathworks.com/channels/12397/feeds.json?results=8000',
+    'https://api.thingspeak.com/channels/159150/feeds.CSV?results=8000',
+    'https://api.thingspeak.com/channels/196384/feeds.CSV?results=8000',
+    'https://api.thingspeak.com/channels/178434/feeds.CSV?results=8000',
+    
 ]
 
-app = Flask(__name__)
+app = Flask(_name_)
 
 def descargar(url):
-    # descarga el json en un dataframe desde el url
-    headers = {'User-Agent': 'MiAplicacionPython/1.0'}  # Agrega un encabezado User-Agent
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()  # Lanza una excepción si la petición falla (status code != 200)
-    data = response.json()  # Obtiene los datos JSON de la respuesta
-    feeds = data['feeds']  # Los datos de las lecturas suelen estar en la lista 'feeds'
-    df = pd.DataFrame(feeds)
+    #descarga el csv en un dataframe desde el url
+    df = pd.read_csv(url)
+    #hace la conversion de la caneda en una fecha real
+    df['created_at'] = pd.to_datetime(df['created_at'])
+#se borra las columnas inecesarias
+    if 'field6' in df.columns:
+        df.drop(['entry_id', 'field5', 'field6'], axis=1, inplace=True)
+    else:
+        df.drop(['entry_id', 'field5', 'field7'], axis=1, inplace=True)
 
-    # Renombrar y seleccionar columnas (esto puede necesitar ajuste según la estructura del JSON)
-    df.rename(columns={'created_at': 'fecha',
-                       'field1': 'temperatura_exterior',
-                       'field2': 'temperatura_interior',
-                       'field3': 'presion_atmosferica',
-                       'field4': 'humedad'}, inplace=True)
-
-    # Convertir la columna 'fecha' a datetime
-    df['fecha'] = pd.to_datetime(df['fecha'])
-
-    # Manejar valores nulos reemplazándolos con 0
-    df['temperatura_exterior'].fillna(0, inplace=True)
-    df['temperatura_interior'].fillna(0, inplace=True)
-    df['presion_atmosferica'].fillna(0, inplace=True)
-    df['humedad'].fillna(0, inplace=True)
-
-    # Eliminar columnas 'entry_id' y otras 'field' que no se renombraron
-    columns_to_drop = [col for col in df.columns if col.startswith('field') and col not in ['field1', 'field2', 'field3', 'field4']]
-    columns_to_drop.append('entry_id')
-    df.drop(columns=columns_to_drop, errors='ignore', inplace=True)
-
+    # Renombre de columnas
+    df.columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
     return df
 
 def graficar(i, df):
@@ -89,7 +67,7 @@ def actualizar_datos():
     return redirect('/')
 
 # Programa Principal
-if __name__ == '__main__':
+if _name_ == '_main_':
     # Descarga los datos y crea las gráficas
     nombres = actualizar()
 
