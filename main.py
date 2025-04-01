@@ -37,7 +37,7 @@ def descargar(url):
 
     # Renombre de columnas
     remaining_columns = len(df.columns)
-    expected_columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
+    expected_columns = ['temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
 
     if url == 'https://thingspeak.com/channels/1293177/feeds.csv?results=8000' and remaining_columns == 4:
         df.columns = ['temperatura', 'humedad', 'presion']
