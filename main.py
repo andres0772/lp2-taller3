@@ -37,7 +37,7 @@ def descargar(url):
 
 def graficar(i, df):
     lista = []
-    for columna in df.columns[1:]:  # Omitimos la columna de fecha
+    for columna in df.columns[1:]:  
         plt.figure(figsize=(8, 5))
         plt.plot(df['fecha'], df[columna], label=columna)
         plt.title(f"Historial de {columna} - Estación #{i}")
