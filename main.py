@@ -41,7 +41,7 @@ def graficar(i, df):
     for columna in df.columns[1:]:  
         plt.figure(figsize=(8, 5))
         plt.plot(df['fecha'], df[columna], label=columna)
-        plt.title(f"Historial de {columna} - Estación #{i}")
+        plt.title(f"Historial de la {columna} - de una ciudad #{i}")
         plt.xlabel("Fecha")
         plt.ylabel(columna)
         plt.legend()
