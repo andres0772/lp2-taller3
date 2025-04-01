@@ -1,6 +1,8 @@
 from flask import Flask, render_template, redirect
 import pandas as pd
 import matplotlib.pyplot as plt
+import requests
+import io
 
 import matplotlib
 
@@ -17,7 +19,11 @@ app = Flask(__name__)
 
 def descargar(url):
     #descarga el csv en un dataframe desde el url
-    df = pd.read_csv(url)
+    headers = {'User-Agent': 'MiAplicacionPython/1.0'}  # Agrega un encabezado User-Agent
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()  # Lanza una excepción si la petición falla (status code != 200)
+    csv_data = response.text
+    df = pd.read_csv(io.StringIO(csv_data))
     #hace la conversion de la caneda en una fecha real
     df['created_at'] = pd.to_datetime(df['created_at'])
 #se borra las columnas inecesarias
