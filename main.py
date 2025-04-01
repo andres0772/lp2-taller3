@@ -17,7 +17,7 @@ matplotlib.use('agg')  # Quita el warning de main thread
 
 
 URLs = [
-    'https://thingspeak.com/channels/159150/feeds.csv?results=8000',
+    'https://thingspeak.com/channels/870845/feeds.csv?results=8000',
     
     
 ]
@@ -28,28 +28,14 @@ def descargar(url):
     #descarga el csv en un dataframe desde el url
     df = pd.read_csv(url)
     #hace la conversion de la caneda en una fecha real
-    df['created_at'] = pd.to_datetime(df['created_at'])
+    df['created_at'] = pd.to.datetime(df['created_at'])
 #se borra las columnas inecesarias
-    columns_to_drop = ['entry_id', 'field5', 'field6', 'field7']
-    for col in columns_to_drop:
-        if col in df.columns:
-            df.drop(col, axis=1, inplace=True)
-
-    # Renombre de columnas
-    # Asegurarse de que haya suficientes columnas para renombrar
-    expected_columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
-    actual_columns = len(df.columns)
-    if actual_columns == len(expected_columns):
-        df.columns = expected_columns
-    elif actual_columns > len(expected_columns):
-        # Tomar las primeras N columnas si hay más de las esperadas
-        df = df.iloc[:, :len(expected_columns)]
-        df.columns = expected_columns
-    else:
-        print(f"Advertencia: Número inesperado de columnas ({actual_columns}) en el DataFrame de {url}")
-        print(f"Columnas encontradas: {df.columns.tolist()}")
-        # Aquí podrías decidir qué hacer si no hay suficientes columnas
-
+    if 'field6' in df.columns:
+        df.drop(['entry_id', 'field5', 'field6'], axis=1 inplace=true)
+    else
+        df.drop(['entry_id', 'field5', 'field7'], axis=1 inplace=true)
+     # Renombre de columnas
+    df.columns = ['fecha', 'temp_exterior', 'temp_interior', 'presion_at', 'humedad'],
     return df
 
 def graficar(i, df):
