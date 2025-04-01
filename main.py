@@ -41,7 +41,7 @@ def descargar(url):
     expected_columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
 
     if url == 'https://thingspeak.com/channels/870845/feeds.csv?results=8000' and remaining_columns == 4:
-        df.columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'humedad']
+        df.columns = ['fecha', 'temperatura_mensual', 'temperatura_interior', 'humedad']
     elif remaining_columns == 5:
         df.columns = expected_columns
     elif url == 'https://thingspeak.com/channels/1293177/feeds.csv?results=8000' and remaining_columns == 6:
@@ -67,7 +67,7 @@ def graficar(i, df):
         # Se hace la gráfica
         plt.plot(df['fecha'], df[columna], label=columna)
         # Se ponen los títulos
-        plt.title(f"Historia sobre {columna} - estacion #{i}")
+        plt.title(f"Historia sobre la {columna} - estacion #{i}")
         # Graba la imagen
         plt.savefig(f"static/g{i}_{columna}.png")
         lista.append(f"g{i}_{columna}.png")
