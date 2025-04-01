@@ -28,7 +28,7 @@ def descargar(url):
     # Descarga el CSV en un DataFrame desde el URL
     df = pd.read_csv(url)
     # Hace la conversión de la cadena en una fecha real
-    df['created_at '] = pd.to_datetime(df ['created_at'])
+    df['created_at'] = pd.to_datetime(df['created_at'])
     # Se borran las columnas innecesarias si existen
     columnas_a_borrar = ['entry_id', 'field5', 'field6', 'field7']
     columnas_existentes = [col for col in columnas_a_borrar if col in df.columns]
