@@ -31,13 +31,26 @@ def descargar(url):
     #hace la conversion de la caneda en una fecha real
     df['created_at'] = pd.to_datetime(df['created_at'])
 #se borra las columnas inecesarias
-    if 'field6' in df.columns:
-        df.drop(['entry_id', 'field5', 'field6'], axis=1, inplace=True)
-    else:
-        df.drop(['entry_id', 'field5', 'field7'], axis=1, inplace=True)
+    columns_to_drop = ['entry_id', 'field5', 'field6', 'field7']
+    for col in columns_to_drop:
+        if col in df.columns:
+            df.drop(col, axis=1, inplace=True)
 
     # Renombre de columnas
-    df.columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
+    # Asegurarse de que haya suficientes columnas para renombrar
+    expected_columns = ['fecha', 'temperatura_exterior', 'temperatura_interior', 'presion_atmosferica', 'humedad']
+    actual_columns = len(df.columns)
+    if actual_columns == len(expected_columns):
+        df.columns = expected_columns
+    elif actual_columns > len(expected_columns):
+        # Tomar las primeras N columnas si hay más de las esperadas
+        df = df.iloc[:, :len(expected_columns)]
+        df.columns = expected_columns
+    else:
+        print(f"Advertencia: Número inesperado de columnas ({actual_columns}) en el DataFrame de {url}")
+        print(f"Columnas encontradas: {df.columns.tolist()}")
+        # Aquí podrías decidir qué hacer si no hay suficientes columnas
+
     return df
 
 def graficar(i, df):
