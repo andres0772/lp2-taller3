@@ -34,7 +34,7 @@ def descargar(url):
     columnas_existentes = [col for col in columnas_a_borrar if col in df.columns]
     df.drop(columnas_existentes, axis=1, inplace=True)
     # Renombre de columnas
-    df.columns = ['fecha', 'temperatura_mensual', 'humedad_mensual', 'presion', 'otro']
+    df.columns = ['fecha', 'temperatura_mensual', 'humedad_mensual', 'presion',]
     return df
 
 def graficar(i, df):
